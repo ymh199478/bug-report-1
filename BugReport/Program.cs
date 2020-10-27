@@ -30,8 +30,6 @@ namespace BugReport
                 {
                     FileName = "git",
                     CreateNoWindow = true,
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true,
                     UseShellExecute = false,
                 },
             };
@@ -40,20 +38,6 @@ namespace BugReport
             process.StartInfo.Arguments = command;
             process.StartInfo.WorkingDirectory = Path.Combine(Environment.CurrentDirectory, "repo");
             process.Start();
-
-            process.ErrorDataReceived += (sender, eventArgs) =>
-            {
-                Console.WriteLine(eventArgs.Data);
-            };
-
-            process.OutputDataReceived += (sender, eventArgs) =>
-            {
-                Console.WriteLine(eventArgs.Data);
-            };
-
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-
             process.WaitForExit();
             process.Close();
         }
