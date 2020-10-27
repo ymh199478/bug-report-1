@@ -13,9 +13,6 @@ namespace BugReport
 
             ListReference();
 
-            inputStream = Console.OpenStandardInput();
-            Console.SetIn(new StreamReader(inputStream));
-
             Console.WriteLine("Please enter something first:");
             var line = Console.ReadLine();
             Console.WriteLine($"read first: {line}");
