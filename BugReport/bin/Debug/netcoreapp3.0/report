@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-dir=$(cd "${0%[/\\]*}" > /dev/null; pwd)
-dotnet "${dir}/BugReport.dll" "$@"

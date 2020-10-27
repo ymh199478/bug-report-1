@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace BugReport
@@ -13,6 +12,9 @@ namespace BugReport
             Console.SetIn(new StreamReader(inputStream));
 
             ListReference();
+
+            inputStream = Console.OpenStandardInput();
+            Console.SetIn(new StreamReader(inputStream));
 
             Console.WriteLine("Please enter something first:");
             var line = Console.ReadLine();
@@ -29,7 +31,7 @@ namespace BugReport
             {
                 StartInfo =
                 {
-                    FileName = GetShellPath(),
+                    FileName = "git",
                     CreateNoWindow = true,
                     RedirectStandardError = true,
                     RedirectStandardOutput = true,
@@ -37,8 +39,8 @@ namespace BugReport
                 },
             };
 
-            var command = "git show-ref --head -d";
-            process.StartInfo.Arguments = GetShellCommand(command);
+            var command = "show-ref --head -d";
+            process.StartInfo.Arguments = command;
             process.StartInfo.WorkingDirectory = Path.Combine(Environment.CurrentDirectory, "repo");
             process.Start();
 
@@ -56,47 +58,7 @@ namespace BugReport
             process.BeginErrorReadLine();
 
             process.WaitForExit();
-        }
-
-        /// <summary>
-        /// Returns the name of the shell to the operating system.
-        /// </summary>
-        /// <returns>The name of the shell.</returns>
-        private static string GetShellPath()
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return "cmd.exe";
-            }
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
-                || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                return "/bin/bash";
-            }
-
-            throw new NotSupportedException("The operating system does not support executing the command line.");
-        }
-
-        /// <summary>
-        /// Returns the shell command argument.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns>The shell command.</returns>
-        private static string GetShellCommand(string command)
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return $"/c \"{command}\"";
-            }
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
-                || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                return $"-c \"{command}\"";
-            }
-
-            throw new NotSupportedException("The operating system does not support executing the command line.");
+            process.Close();
         }
 
         /// <summary>
